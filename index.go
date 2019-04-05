@@ -10,6 +10,7 @@ import (
 	"image/draw"
 	"image/jpeg"
 	// "image/png"
+	"io/ioutil"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -18,6 +19,7 @@ import (
 
 var errInvalidFormat = errors.New("invalid format")
 
+// Handler has to be first function in file for Now deployment to work for some reason
 func Handler(w http.ResponseWriter, r *http.Request) {
 	config := ImageConfig{}
 
@@ -47,9 +49,21 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		config.Height = config.Width
 	}
 
-	/* Fail on 0x0 dimensions */
+	/* Fail on invalid dimensions, returning help page */
 	if config.Height == 0 && config.Width == 0 {
-		w.WriteHeader(http.StatusBadRequest)
+		// w.WriteHeader(http.StatusBadRequest)
+
+
+		content, err := ioutil.ReadFile("index.html")
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		res := bytes.NewBuffer(content)
+
+		w.Header().Set("Content-Type", "text/html")
+		w.Write(res.Bytes())
+
 	} else {
 		c := query_params.Get("color")
 		fmt.Printf("%T, %v\n", c, c)
