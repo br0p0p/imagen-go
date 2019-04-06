@@ -10,7 +10,7 @@ import (
 	"image/draw"
 	"image/jpeg"
 	// "image/png"
-	"io/ioutil"
+	// "io/ioutil"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -53,13 +53,12 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	if config.Height == 0 && config.Width == 0 {
 		// w.WriteHeader(http.StatusBadRequest)
 
+		// content, err := ioutil.ReadFile("index.html")
+		// if err != nil {
+		// 	fmt.Println(err)
+		// }
 
-		content, err := ioutil.ReadFile("index.html")
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		res := bytes.NewBuffer(content)
+		res := bytes.NewBuffer([]byte(helpPage))
 
 		w.Header().Set("Content-Type", "text/html")
 		w.Write(res.Bytes())
@@ -178,15 +177,126 @@ func EncodeImageToBuffer(img *image.RGBA, format string) *bytes.Buffer {
 
 /* Uncomment to develop locally */
 
-// func main() {
-// 	http.HandleFunc("/", Handler)
+func main() {
+	http.HandleFunc("/", Handler)
 
-// 	port := 8080
+	port := 8080
 
-// 	// Handle static files
-// 	fs := http.FileServer(http.Dir("static/"))
-// 	http.Handle("/static/", http.StripPrefix("/static/", fs))
+	// Handle static files
+	fs := http.FileServer(http.Dir("static/"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
-// 	fmt.Println(fmt.Sprintf("Server listening at http://localhost:%d", port))
-// 	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
-// }
+	fmt.Println(fmt.Sprintf("Server listening at http://localhost:%d", port))
+	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
+}
+
+var helpPage = `
+<html>
+  <head>
+    <title>imagen</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: Consolas, monospace;
+        color: #333;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      h3 {
+        font-weight: normal;
+      }
+
+      .container {
+        border: 20px solid #333;
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .content {
+        width: 35%;
+        height: auto;
+        min-width: 400px;
+        text-align: center;
+      }
+
+      code {
+        font-size: 0.8rem;
+        line-height: 1.4rem;
+        padding: 5px 5px;
+        background-color: lightgray;
+        border-radius: 5px;
+      }
+
+      a:hover {
+        color: tomato;
+      }
+      hr {
+        border: none;
+        border-bottom: 1px solid #333;
+        width: 100%;
+        margin: 30px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="content">
+        <h1>imagen</h1>
+        <h3>
+          <i>image generator, hosted on <a href="https://zeit.co/now">Now</a></i>
+        </h3>
+        <p>
+          <code
+            ><a
+              href="https://imagen-go.br0p0p.now.sh/?width=400&height=10&color=ff6347"
+              target="_blank"
+              >https://imagen-go.br0p0p.now.sh/?width=400&height=10&color=ff6347</a
+            ></code
+          >
+        </p>
+        <p>&darr;</p>
+        <p>
+          <img
+            src="https://imagen-go.br0p0p.now.sh/?width=400&height=10&color=ff6347"
+          />
+        </p>
+        <!-- <hr /> -->
+        <p>.</p>
+
+        <p>
+          If you don't specify a color, a random one will be chosen.
+          <i style="color:gray;">(hint: refresh this page)</i>
+        </p>
+        <p>
+          <code
+            ><a href="https://imagen-go.br0p0p.now.sh/?width=40" target="_blank"
+              >https://imagen-go.br0p0p.now.sh/?width=40</a
+            ></code
+          >
+        </p>
+        <p>&darr;</p>
+        <p><img src="https://imagen-go.br0p0p.now.sh/?width=40" /></p>
+
+        <p>.</p>
+        <p>.</p>
+        <p>.</p>
+        <p>
+          <small>
+            This little lambda was created in a few hours as a learning
+            exercise.<br />Don't rely on it too much.
+          </small>
+        </p>
+        <a href="https://github.com/br0p0p/imagen-go">View code on Github</a>
+      </div>
+    </div>
+  </body>
+</html>
+
+`
