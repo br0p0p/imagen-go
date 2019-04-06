@@ -177,18 +177,18 @@ func EncodeImageToBuffer(img *image.RGBA, format string) *bytes.Buffer {
 
 /* Uncomment to develop locally */
 
-func main() {
-	http.HandleFunc("/", Handler)
+// func main() {
+// 	http.HandleFunc("/", Handler)
 
-	port := 8080
+// 	port := 8080
 
-	// Handle static files
-	fs := http.FileServer(http.Dir("static/"))
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
+// 	// Handle static files
+// 	fs := http.FileServer(http.Dir("static/"))
+// 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
-	fmt.Println(fmt.Sprintf("Server listening at http://localhost:%d", port))
-	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
-}
+// 	fmt.Println(fmt.Sprintf("Server listening at http://localhost:%d", port))
+// 	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
+// }
 
 var helpPage = `
 <html>
